@@ -28,6 +28,7 @@
         "username": "_SYSTEM",
         "password": "SYS"
       }
-    ]
+    ],
+    "python.pythonPath": "/usr/local/bin/python3"
 
 }

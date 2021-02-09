@@ -58,3 +58,4 @@ zn "%SYS" \
 
 zw ##class(community.csvgen).GenerateFromURL("https://github.com/h2oai/h2o-tutorials/raw/master/h2o-world-2017/automl/data/product_backorders.csv")
 
+d ##class(dc.python.test).TitanicMeanAge()

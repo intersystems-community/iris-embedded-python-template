@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Export generator="Cache" version="25">
-  <Document name="objectscript-template.ZPM">
+  <Document name="iris-python-template.ZPM">
     <Module>
-      <Name>objectscript-template</Name>
-      <Version>1.1.2</Version>
+      <Name>iris-python-template</Name>
+      <Version>0.0.1</Version>
       <Packaging>module</Packaging>
       <SourcesRoot>src</SourcesRoot>
-      <Resource Name="dc.PackageSample.PKG"/>
+      <Resource Name="dc.python.PKG"/>
+      <FileCopy Name="python/" Target="${mgrdir}python/"/>
     </Module>
   </Document>
 </Export>
