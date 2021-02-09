@@ -3,11 +3,12 @@
   <Document name="iris-python-template.ZPM">
     <Module>
       <Name>iris-python-template</Name>
-      <Version>0.0.1</Version>
+      <Version>0.0.2</Version>
       <Packaging>module</Packaging>
       <SourcesRoot>src</SourcesRoot>
       <Resource Name="dc.python.PKG"/>
       <FileCopy Name="python/" Target="${mgrdir}python/"/>
+      <FileCopy Name="data/" Target="${mgrdir}data/"/>
     </Module>
   </Document>
 </Export>
