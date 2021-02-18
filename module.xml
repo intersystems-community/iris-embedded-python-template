@@ -3,7 +3,8 @@
   <Document name="iris-python-template.ZPM">
     <Module>
       <Name>iris-python-template</Name>
-      <Version>1.0.1</Version>
+      <Version>1.0.2</Version>
+      <Description>The simplest template to run embedded python</Description>
       <Packaging>module</Packaging>
       <SourcesRoot>src</SourcesRoot>
       <Resource Name="dc.python.PKG"/>
