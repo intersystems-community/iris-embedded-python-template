@@ -4,7 +4,7 @@ import pandas as pd
 def hello():
     return "world"
 
-def meanage(filename="titanic.csv"):
+def meanage(filename):
     # Read data
     titanic = pd.read_csv(filename,",")
 
@@ -19,4 +19,4 @@ def meanage(filename="titanic.csv"):
 
     return str(mean_age)
 
-print(meanage())
+print(meanage("/irisrun/repo/data/titanic.csv"))
