@@ -1,27 +1,27 @@
-ARG IMAGE=store/intersystems/iris-community:2020.1.0.204.0
-ARG IMAGE=intersystemsdc/iris-community:2020.1.0.209.0-zpm
-ARG IMAGE=intersystemsdc/iris-community:2020.2.0.204.0-zpm
-ARG IMAGE=intersystemsdc/irishealth-community:2020.3.0.200.0-zpm
-ARG IMAGE=intersystemsdc/iris-community:2020.3.0.200.0-zpm
-ARG IMAGE=intersystemsdc/iris-community:2020.3.0.221.0-zpm
-ARG IMAGE=intersystemsdc/iris-community:2020.4.0.524.0-zpm
-ARG IMAGE=intersystemsdc/iris-ml-community:2020.3.0.302.0-zpm
-ARG IMAGE=intersystemsdc/iris-ml-community
+ARG IMAGE=intersystemsdc/irishealth-community
+ARG IMAGE=intersystemsdc/iris-community
+ARG IMAGE=intersystemsdc/iris-community:preview
 FROM $IMAGE
 
-USER root   
-        
-WORKDIR /opt/irisbuild
-RUN chown ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /opt/irisbuild
-USER ${ISC_PACKAGE_MGRUSER}
+WORKDIR /home/irisowner/irisbuild
 
-#COPY  Installer.cls .
-COPY  data data
-COPY  python python
-COPY  src src
-COPY module.xml module.xml
-COPY iris.script iris.script
+ARG TESTS=0
+ARG MODULE="iris-python-template"
+ARG NAMESPACE="USER"
 
-RUN iris start IRIS \
-	&& iris session IRIS < iris.script \
-    && iris stop IRIS quietly
+# create Python env
+ENV PYTHON_PATH=/usr/irissys/bin/irispython
+ENV SRC_PATH=/irisdev/app
+ENV IRISUSERNAME "SuperUser"
+ENV IRISPASSWORD "SYS"
+ENV IRISNAMESPACE "USER"
+
+RUN pip3 install -r requirements.txt
+
+## Start IRIS
+
+RUN --mount=type=bind,src=.,dst=. \
+    iris start IRIS && \
+	iris session IRIS < iris.script && \
+    ([ $TESTS -eq 0 ] || iris session iris -U $NAMESPACE "##class(%ZPM.PackageManager).Shell(\"test $MODULE -v -only\",1,1)") && \
+    iris stop IRIS quietly
