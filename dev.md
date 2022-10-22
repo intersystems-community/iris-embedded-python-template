@@ -1,12 +1,17 @@
 # useful commands
 ## clean up docker 
+use it when docker says "There is no space left on device". It will remove built but not used images and other temporary files.
 ```
 docker system prune -f
 ```
 
+```
+docker rm -f $(docker ps -qa)
+```
+
 ## build container with no cache
 ```
-docker-compose build --no-cache
+docker-compose build --no-cache --progress=plain
 ```
 ## start iris container
 ```
@@ -17,6 +22,17 @@ docker-compose up -d
 ```
 docker-compose exec iris iris session iris -U IRISAPP
 ```
+
+## map iris key from Mac home directory to IRIS in container
+- ~/iris.key:/usr/irissys/mgr/iris.key
+
+## install git in the docker image
+## add git in dockerfile
+USER root
+RUN apt update && apt-get -y install git
+
+USER ${ISC_PACKAGE_MGRUSER}
+
 
 ## install docker-compose
 ```
@@ -56,6 +72,22 @@ zn "%SYS" \
   write "Web application "_webName_" has been created!",! 
 ```
 
-zw ##class(community.csvgen).GenerateFromURL("https://github.com/h2oai/h2o-tutorials/raw/master/h2o-world-2017/automl/data/product_backorders.csv")
 
-d ##class(dc.python.test).TitanicMeanAge()
+
+```
+do $SYSTEM.OBJ.ImportDir("/opt/irisbuild/src",, "ck") 
+```   
+
+
+### run tests described in the module
+
+IRISAPP>zpm
+IRISAPP:zpm>load /irisrun/repo
+IRISAPP:zpm>test package-name
+
+### install ZPM with one line
+    // Install ZPM
+    set $namespace="%SYS", name="DefaultSSL" do:'##class(Security.SSLConfigs).Exists(name) ##class(Security.SSLConfigs).Create(name) set url="https://pm.community.intersystems.com/packages/zpm/latest/installer" Do ##class(%Net.URLParser).Parse(url,.comp) set ht = ##class(%Net.HttpRequest).%New(), ht.Server = comp("host"), ht.Port = 443, ht.Https=1, ht.SSLConfiguration=name, st=ht.Get(comp("path")) quit:'st $System.Status.GetErrorText(st) set xml=##class(%File).TempFilename("xml"), tFile = ##class(%Stream.FileBinary).%New(), tFile.Filename = xml do tFile.CopyFromAndSave(ht.HttpResponse.Data) do ht.%Close(), $system.OBJ.Load(xml,"ck") do ##class(%File).Delete(xml)
+
+
+do ##class(%SYS.Python).Shell()

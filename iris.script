@@ -1,8 +1,14 @@
-;do $System.OBJ.LoadDir("/opt/irisbuild/src","ck",,1)
+    ;do $System.OBJ.LoadDir("/opt/irisbuild/src","ck",,1)
 
-zn "%SYS"
-Do ##class(Security.Users).UnExpireUserPasswords("*")
+    zn "%SYS"
+    Do ##class(Security.Users).UnExpireUserPasswords("*")
 
-zn "USER"
-zpm "load /opt/irisbuild/ -v":1:1
-halt
+    ; enabling callin for Embedded Python
+    do ##class(Security.Services).Get("%Service_CallIn",.prop)
+    set prop("Enabled")=1
+    set prop("AutheEnabled")=48
+    do ##class(Security.Services).Modify("%Service_CallIn",.prop)
+
+    zn "USER"
+    zpm "load /home/irisowner/irisbuild/ -v":1:1
+    halt

@@ -19,4 +19,4 @@ def meanage(filename="titanic.csv"):
 
     return str(mean_age)
 
-#print(meanage())
+print(meanage())

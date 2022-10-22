@@ -1,5 +1,7 @@
 ## iris-embedded-python-template
 This is a template to work with Embedded Python in InterSystems IRIS
+It demonstrates how to call python libs from ObjectScript in dc.python.test class.
+And it demonstrates how to deal with IRIS from python scripts - python/irisapp.py
 
 ## Prerequisites
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
@@ -33,6 +35,7 @@ $ docker-compose up -d
 
 ## How to work with it
 
+### Working with Python libs from ObjectScript
 Open IRIS terminal:
 
 ```
@@ -60,4 +63,16 @@ USER>d ##class(dc.python.test).TitanicMeanAge()
 mean age=29.69911764705882
 
 ```
+### Working with IRIS from Embedded Python
+Open VSCode in Devcontainer - this is the bell(notifications) button in the left bottom corner, where you will see the suggestion to open VSCOde in DevContainer mode. 
+Follow it - it will let to execute Embedded Python scripts vs IRIS and develop it at the same time.
+
+Once devcontainer is opened go to /python/irisapp.py and run it, either with Run button in the top right corner, or in terminal via:
+```
+irispython /python/irisapp.py
+```
+The script contains different samples of working with IRIS from python and goes through it.
+
+Feel free to use the template for your own development just by adding new py files.
+
 

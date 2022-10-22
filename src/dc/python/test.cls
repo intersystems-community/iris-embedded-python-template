@@ -1,4 +1,4 @@
-Class dc.python.test
+Class dc.python.PythonFromObjectScript
 {
 
 ClassMethod HelloWorld() As %Status
