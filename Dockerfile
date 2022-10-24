@@ -11,7 +11,7 @@ ARG NAMESPACE="USER"
 
 # create Python env
 ENV PYTHON_PATH=/usr/irissys/bin/irispython
-ENV SRC_PATH=/irisdev/app
+ENV SRC_PATH=/irisrun/repo
 ENV IRISUSERNAME "SuperUser"
 ENV IRISPASSWORD "SYS"
 ENV IRISNAMESPACE "USER"
