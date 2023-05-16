@@ -1,4 +1,4 @@
-    ;do $System.OBJ.LoadDir("/opt/irisbuild/src","ck",,1)
+    ;do $System.OBJ.LoadDir("/home/irisowner/dev/src","ck",,1)
 
     zn "%SYS"
     Do ##class(Security.Users).UnExpireUserPasswords("*")
@@ -10,5 +10,5 @@
     do ##class(Security.Services).Modify("%Service_CallIn",.prop)
 
     zn "USER"
-    zpm "load /home/irisowner/irisbuild/ -v":1:1
+    zpm "load /home/irisowner/dev/ -v":1:1
     halt

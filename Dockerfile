@@ -3,18 +3,19 @@ ARG IMAGE=intersystemsdc/iris-community
 ARG IMAGE=intersystemsdc/iris-community:preview
 FROM $IMAGE
 
-WORKDIR /home/irisowner/irisbuild
+WORKDIR /home/irisowner/dev
 
 ARG TESTS=0
 ARG MODULE="iris-python-template"
 ARG NAMESPACE="USER"
 
 # create Python env
-ENV PYTHON_PATH=/usr/irissys/bin/irispython
-ENV SRC_PATH=/irisrun/repo
+## Embedded Python environment
 ENV IRISUSERNAME "SuperUser"
 ENV IRISPASSWORD "SYS"
 ENV IRISNAMESPACE "USER"
+ENV PYTHON_PATH=/usr/irissys/bin/
+ENV PATH "/usr/irissys/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/irisowner/bin"
 
 ## Start IRIS
 

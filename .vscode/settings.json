@@ -1,6 +1,6 @@
 {
     "files.associations": {
-    
+
         "Dockerfile*": "dockerfile",
         "iris.script": "objectscript"
       },
@@ -12,7 +12,7 @@
         "service": "iris",
         "internalPort": 52773
       },
-      "active": true
+      "active": false
     },
     "sqltools.connections": [
       {

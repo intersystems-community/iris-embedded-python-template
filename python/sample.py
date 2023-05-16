@@ -19,4 +19,4 @@ def meanage(filename):
 
     return str(mean_age)
 
-print(meanage("/irisrun/repo/data/titanic.csv"))
+print(meanage("/home/irisowner/dev/data/titanic.csv"))
