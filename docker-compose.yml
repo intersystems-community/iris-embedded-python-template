@@ -4,11 +4,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: --check-caps false
     restart: always
     ports:
       - 1972
-      - 55037:52773
+      - 55038:52773
       - 53773
     volumes:
       - ./:/home/irisowner/dev

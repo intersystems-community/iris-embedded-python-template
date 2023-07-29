@@ -9,7 +9,7 @@
       <SourcesRoot>src</SourcesRoot>
       <Resource Name="dc.python.PKG"/>
       <FileCopy Name="python/" Target="${libdir}python/"/>
-      <FileCopy Name="data/" Target="${libdir}data/"/>
+      <FileCopy Name="data/" Target="${libdir}data/${packagename}/"/>
     </Module>
   </Document>
 </Export>
