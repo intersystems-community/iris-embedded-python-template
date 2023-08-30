@@ -1,7 +1,7 @@
 ## iris-embedded-python-template
 This is a template to work with Embedded Python in InterSystems IRIS
-It demonstrates how to call python libs from ObjectScript in dc.python.test class.
-And it demonstrates how to deal with IRIS from python scripts - python/irisapp.py
+It demonstrates how to call python libs from ObjectScript in `Demo.Python` class.
+And it demonstrates how to deal with IRIS from python scripts - `python/irisapp.py`
 
 ## Prerequisites
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
@@ -39,40 +39,142 @@ $ docker-compose up -d
 Open IRIS terminal:
 
 ```
-$ docker-compose exec iris iris session iris
+$ docker-compose exec iris iris session iris -U IRISAPP
 USER>
 ```
 
-The first test demonstrates the call to a standard python library working with dates datetime
+The first test demonstrates the call to a standard python library
 ```
-USER>d ##class(dc.python.test).Today()
-2021-02-09
+USER>d ##class(Demo.Python).HelloWorld()
+Hello world
 ```
 
 Another example shows the work of a custom lib sample.py which is installed with repo or ZPM. It has function hello which returns string "world":
 ```
-USER>d ##class(dc.python.test).Hello()
+USER>d ##class(Demo.Python).Hello()
 World
 ```
 
-Another example shows how to work with files and use pandas and numpy libs. 
-It calculates the mean age of Titanic passengers:
-
-```
-USER>d ##class(dc.python.test).TitanicMeanAge()
-mean age=29.69911764705882
-
-```
 ### Working with IRIS from Embedded Python
+
 Open VSCode in Devcontainer - this is the bell(notifications) button in the left bottom corner, where you will see the suggestion to open VSCOde in DevContainer mode. 
 Follow it - it will let to execute Embedded Python scripts vs IRIS and develop it at the same time.
 
 Once devcontainer is opened go to /python/irisapp.py and run it, either with Run button in the top right corner, or in terminal via:
 ```
-irispython /python/irisapp.py
+docker-compose exec iris bash
+$python3 src/python/irisapp.py
 ```
 The script contains different samples of working with IRIS from python and goes through it.
 
 Feel free to use the template for your own development just by adding new py files.
 
+### Working with IOP (Interoperability On Python)
 
+The template also contains samples of working with IOP.
+
+Connect to the running with a bash terminal:
+```
+docker-compose exec iris bash
+```
+
+Run the following commands to start the IOP:
+```
+iop -s dc.Python.Production
+```
+
+That will start the IOP server and you will see the following output:
+```
+2023-08-30 14:41:18.066 Info None 1356 63 None Ens.Director StartProduction Production 'dc.Python.Production' starting...
+2023-08-30 14:41:18.076 Info Ens.Actor 1357 63 None Ens.Job Start ConfigItem 'Ens.Actor' started in job 1357
+2023-08-30 14:41:18.082 Info Ens.Actor 1358 63 None Ens.Job Start ConfigItem 'Ens.Actor' started in job 1358
+2023-08-30 14:41:18.088 Info Ens.Alarm 1359 63 None Ens.Job Start ConfigItem 'Ens.Alarm' started in job 1359
+2023-08-30 14:41:18.098 Info Ens.MonitorService 1360 63 None Ens.Job Start ConfigItem 'Ens.MonitorService' started in job 1360
+2023-08-30 14:41:18.100 Info Ens.ScheduleHandler 1361 63 None Ens.Job Start ConfigItem 'Ens.ScheduleHandler' (Ens.Actor) started in job 1361
+2023-08-30 14:41:18.108 Info EnsLib.Testing.Process 1362 63 None Ens.Job Start ConfigItem 'EnsLib.Testing.Process' (Ens.Actor) started in job 1362
+2023-08-30 14:41:18.121 Info Python.FilterPostRoutingRule 1364 63 None Ens.Job Start ConfigItem 'Python.FilterPostRoutingRule' (Ens.Actor) started in job 1364
+2023-08-30 14:41:18.129 Info None 1356 64 None Ens.Director StartProduction Production 'dc.Python.Production' started.
+2023-08-30 14:41:18.129 Info Ens.ScheduleHandler 1361 64 64 Ens.Director UpdateProduction Production 'dc.Python.Production' updating...
+2023-08-30 14:41:18.478 Info Python.FileOperation 1363 64 None Ens.Job Start ConfigItem 'Python.FileOperation' started in job 1363
+2023-08-30 14:41:18.562 Info Python.RedditService 1365 64 None Ens.Job Start ConfigItem 'Python.RedditService' started in job 1365
+2023-08-30 14:41:18.566 Info Python.RedditService 1365 64 None RedditService on_process_input Sending post VENDER LIVROS É UM DOS TRABALHO MAIS SIGNIFICANTES EM UMA ÉPOCA DE OBSCURANTISMO.
+```
+
+To stop the IOP press `Ctrl+C` in the terminal.
+
+To exit the logs press `Ctrl+C` again.
+
+### Working with flask
+
+The template also contains samples of working with flask.
+
+Connect to the running with a bash terminal:
+```
+docker-compose exec iris bash
+```
+
+Run the following commands to start the flask server:
+```
+python3 src/python/rest/app.py
+```
+
+That will start the flask server and you will see the following output:
+```
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+```
+
+`5000` is mapped to `55030` in docker-compose.yml
+
+
+#### Test it
+
+Hello world :
+```http
+GET http://localhost:55030/
+Accept: application/json
+```
+
+Result:
+```json
+{
+    "message": "Hello world"
+}
+```
+
+Post a new persistent class
+
+```http
+POST http://localhost:55030/persistentclass
+Content-Type: application/json
+Accept: application/json
+
+{
+    "test": "toto"
+}
+```
+
+Result:
+```json
+{
+    "id": 1,
+    "test": "toto"
+}
+```
+
+Get the persistent class
+
+```http
+GET http://localhost:55030/persistentclass/1
+Accept: application/json
+```
+
+Result:
+```json
+{
+    "id": 1,
+    "test": "toto"
+}
+```
