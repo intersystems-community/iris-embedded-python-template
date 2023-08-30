@@ -1,27 +1,22 @@
-ARG IMAGE=intersystemsdc/irishealth-community
-ARG IMAGE=intersystemsdc/iris-community
 ARG IMAGE=intersystemsdc/iris-community:preview
 FROM $IMAGE
 
 WORKDIR /home/irisowner/dev
 
-ARG TESTS=0
-ARG MODULE="iris-python-template"
-ARG NAMESPACE="USER"
-
 # create Python env
 ## Embedded Python environment
 ENV IRISUSERNAME "SuperUser"
 ENV IRISPASSWORD "SYS"
-ENV IRISNAMESPACE "USER"
+ENV IRISNAMESPACE "IRISAPP"
 ENV PYTHON_PATH=/usr/irissys/bin/
-ENV PATH "/usr/irissys/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/irisowner/bin"
+ENV LD_LIBRARY_PATH=${ISC_PACKAGE_INSTALLDIR}/bin:${LD_LIBRARY_PATH}
+ENV PATH "/usr/irissys/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/irisowner/bin:/home/irisowner/.local/bin"
 
 ## Start IRIS
 
 RUN --mount=type=bind,src=.,dst=. \
     pip3 install -r requirements.txt && \
     iris start IRIS && \
-	iris session IRIS < iris.script && \
-    ([ $TESTS -eq 0 ] || iris session iris -U $NAMESPACE "##class(%ZPM.PackageManager).Shell(\"test $MODULE -v -only\",1,1)") && \
+    iris merge IRIS /home/irisowner/dev/merge.cpf && \
+    python3 /home/irisowner/dev/iris-script.py && \
     iris stop IRIS quietly
