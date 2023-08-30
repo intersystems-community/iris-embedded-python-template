@@ -45,6 +45,7 @@ class RedditService(BusinessService):
         if post is not None:
             msg = PostMessage()
             msg.post = post
+            self.log_info("Sending post "+post.title)
             self.send_request_sync(self.target,msg)
 
     def on_task(self) -> PostClass:
