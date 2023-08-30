@@ -4,3 +4,4 @@ iris-pex-embedded-python>=2.0.0
 dataclasses-json==0.5.7
 sqlalchemy-iris==0.10.5
 flask==2.3.3
+requests==2.26.0
