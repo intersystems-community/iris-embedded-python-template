@@ -9,5 +9,6 @@ services:
       - 1972
       - 55038:52773
       - 53773
+      - 55030:5000
     volumes:
       - ./:/home/irisowner/dev
