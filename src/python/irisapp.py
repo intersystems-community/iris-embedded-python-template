@@ -4,9 +4,13 @@
 # You an invoke this script from shell in the container by calling:
 # python3 src/python/irisapp.py
 import iris
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,text
 
 print('Hello World')
+
+# print current namespace
+print("Current namespace:")
+print(iris.system.Process.NameSpace())
 
 # Run IRIS Class Method 
 print("Method call:")
@@ -46,10 +50,10 @@ def run_sql(query):
     # create sqlalchemy engine
     engine = create_engine('iris+emb:///')
     # run query
-    result = engine.execute(query)
-    # print result
-    for row in result:
-        print(row)
+    with engine.connect() as conn:
+        rs = conn.execute(text(query))
+        for row in rs:
+            print(row)
 
 query="Select * from Demo.PersistentClass"
 print("Running SQL query "+query)
