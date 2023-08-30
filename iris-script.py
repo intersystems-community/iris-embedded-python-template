@@ -1,3 +1,5 @@
+import glob
+import os
 import iris
 import pandas as pd
 from sqlalchemy import create_engine
@@ -13,12 +15,18 @@ iris.cls('Security.Users').UnExpireUserPasswords("*")
 iris.system.Process.SetNamespace("IRISAPP")
 
 # load zpm packages
-iris.cls('%ZPM.PackageManager').Shell("load /home/irisowner/dev -v")
+#iris.cls('%ZPM.PackageManager').Shell("load /home/irisowner/dev -v")
 
 # load demo data
 engine = create_engine('iris+emb:///')
-df = pd.read_csv('/home/irisowner/dev/data/titanic.csv')
-df.to_sql('Titanic', engine, if_exists='replace', index=False, schema='Demo')
+# list all csv files in the demo data folder
+for files in glob.glob('/home/irisowner/dev/data/*.csv'):
+    # get the file name without the extension
+    table_name = os.path.splitext(os.path.basename(files))[0]
+    # load the csv file into a pandas dataframe
+    df = pd.read_csv(files)
+    # write the dataframe to IRIS
+    df.to_sql(table_name, engine, if_exists='replace', index=False, schema='Demo')
 
 # load interop demo
 Utils.migrate('/home/irisowner/dev/src/python/interop/reddit/settings.py')

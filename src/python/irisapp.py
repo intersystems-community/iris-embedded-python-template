@@ -59,11 +59,14 @@ query="Select * from Demo.PersistentClass"
 print("Running SQL query "+query)
 run_sql(query)
 
+query="select top 10 * from Demo.spaceship_titanic"
+print("Running SQL query "+query)
+run_sql(query)
+
 def print_global(glname):
     gl=iris.gref(glname)
     for (key,value) in gl.query([]):
         print(f"key={key}: {value}")
-
 
 glname=iris.cls("%Dictionary.CompiledStorage")._OpenId("Demo.PersistentClass||Default").DataLocation
 print("Printing the whole global of the persistence storage for the class Demo.PersistentClass:"+glname)
