@@ -1,6 +1,8 @@
 import glob
 import os
 import iris
+import platform
+import subprocess
 import pandas as pd
 from sqlalchemy import create_engine
 from grongier.pex import Utils
@@ -15,7 +17,12 @@ iris.cls('Security.Users').UnExpireUserPasswords("*")
 iris.system.Process.SetNamespace("IRISAPP")
 
 # load zpm packages
-iris.cls('%ZPM.PackageManager').Shell("load /home/irisowner/dev -v")
+if platform.machine() == 'x86_64':
+    iris.cls('%ZPM.PackageManager').Shell("load /home/irisowner/dev -v")
+else:
+    # run a shell command with python library subprocess output to stdout
+    result = subprocess.run(["/usr/irissys/bin/iris", "session", "IRIS", "-U", "IRISAPP", "##class(%ZPM.PackageManager).Shell(\"load /home/irisowner/dev -v\")"], capture_output=True)
+    print(result.stdout.decode('utf-8'))
 
 # load demo data
 engine = create_engine('iris+emb:///')
