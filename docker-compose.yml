@@ -1,13 +1,14 @@
 version: '3.6'
 services:
   iris:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: intersystemsdc/iris-community
     restart: always
     ports:
       - 1972
       - 55038:52773
-      - 53773
+    environment:
+      - IRISUSERNAME=_SYSTEM
+      - IRISPASSWORD=SYS
     volumes:
+      - ./init.db/:/docker-entrypoint-initdb.d
       - ./:/home/irisowner/dev
