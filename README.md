@@ -3,6 +3,24 @@ This is a template to work with Embedded Python in InterSystems IRIS
 It demonstrates how to call python libs from ObjectScript in `Demo.Python` class.
 And it demonstrates how to deal with IRIS from python scripts - `python/irisapp.py`
 
+## What is Embedded Python ?
+
+Embedded Python is a feature of InterSystems IRIS that allows you to **run python code in the same process** as the IRIS database engine.
+
+The benefits of Embedded Python are:
+
+- **Performance** 
+  - no need to serialize data between IRIS and Python
+  - speed of data processing in Python is comparable to ObjectScript 
+- **Simplicity** 
+  - no need to install and configure Python separately
+  - easy to deploy IRIS and Python together
+  - easy access to ObjectScript code and functionality from Python
+- **Security** 
+  - no need to open any additional ports for communication between IRIS and Python
+
+And the main benefit is that you can use all the power of Python libraries and frameworks in your InterSystems IRIS solutions.
+
 ## Prerequisites
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
 
@@ -33,26 +51,56 @@ $ docker-compose build
 $ docker-compose up -d
 ```
 
-## How to work with it
+### How to Test it
 
-### Working with Python libs from ObjectScript
-Open IRIS terminal:
+As mentioned Embedded Python works in the **same process as IRIS**.
+
+So you have 2 options to work with Embedded Python in IRIS:
+
+1. Bind VsCode to the running IRIS container.
+2. Develop in VSCode locally and then run the code in IRIS container with a shared folder.
+
+#### Bind VSCode to the running IRIS container
+
+Open VSCode in the project directory.
+
+Go to the `docker-compose.yml` file, right-click on it and select `Compose Up`.
+
+Once the container is up and running you can open the docker extension and right-click on the container name and select `Attach Visual Studio Code`.
+
+#### Develop locally and run the code in IRIS container
+
+By default, the template is configured to use the shared folder `./src` for python scripts to `/home/irisowner/dev/src` in IRIS container.
+
+You can change the folder according to your preferences.
+
+It's recommended to work with a virtual environment.
+
+Create a virtual environment in the project directory:
 
 ```
-$ docker-compose exec iris iris session iris -U IRISAPP
-USER>
+$ python3 -m venv .venv
 ```
 
-The first test demonstrates the call to a standard python library
+Activate the virtual environment:
+
 ```
-USER>d ##class(Demo.Python).HelloWorld()
-Hello world
+$ source .venv/bin/activate
 ```
 
-Another example shows the work of a custom lib sample.py which is installed with repo or ZPM. It has function hello which returns string "world":
+Install the requirements:
+
 ```
-USER>d ##class(Demo.Python).Hello()
-World
+$ pip install -r requirements.txt
+```
+
+Run the python script:
+
+```bash
+# attach to the running IRIS container
+docker-compose exec iris bash
+# run the script
+$ python3 ./src/python/irisapp.py
 ```
 
 ### Working with IRIS from Embedded Python
@@ -61,10 +109,11 @@ Open VSCode in Devcontainer - this is the bell(notifications) button in the left
 Follow it - it will let to execute Embedded Python scripts vs IRIS and develop it at the same time.
 
 Once devcontainer is opened go to /python/irisapp.py and run it, either with Run button in the top right corner, or in terminal via:
+
+```bash
+$ python3 src/python/irisapp.py
 ```
-docker-compose exec iris bash
-$python3 src/python/irisapp.py
-```
+
 The script contains different samples of working with IRIS from python and goes through it.
 
 Feel free to use the template for your own development just by adding new py files.
@@ -99,6 +148,10 @@ That will start the IOP server and you will see the following output:
 2023-08-30 14:41:18.562 Info Python.RedditService 1365 64 None Ens.Job Start ConfigItem 'Python.RedditService' started in job 1365
 2023-08-30 14:41:18.566 Info Python.RedditService 1365 64 None RedditService on_process_input Sending post VENDER LIVROS É UM DOS TRABALHO MAIS SIGNIFICANTES EM UMA ÉPOCA DE OBSCURANTISMO.
 ```
+
+`52773` is mapped to `55038` in docker-compose.yml
+
+You can see the Production in the Management Portal: `http://localhost:55038/csp/irisapp/EnsPortal.ProductionConfig.zen?PRODUCTION=dc.Python.Production&IRISUsername=_SYSTEM&IRISPassword=SYS`
 
 To stop the IOP press `Ctrl+C` in the terminal.
 
@@ -177,4 +230,24 @@ Result:
     "id": 1,
     "test": "toto"
 }
+```
+
+### Working with Python libs from ObjectScript
+Open IRIS terminal:
+
+```
+$ docker-compose exec iris iris session iris -U IRISAPP
+USER>
+```
+
+The first test demonstrates the call to a standard python library
+```
+USER>d ##class(Demo.Python).HelloWorld()
+Hello world
+```
+
+Another example shows the work of a custom lib sample.py which is installed with repo or ZPM. It has function hello which returns string "world":
+```
+USER>d ##class(Demo.Python).Hello()
+World
 ```
