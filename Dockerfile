@@ -1,3 +1,5 @@
+ARG IMAGE=intersystemsdc/irishealth-community
+ARG IMAGE=intersystemsdc/iris-community
 ARG IMAGE=intersystemsdc/iris-community:preview
 FROM $IMAGE
 
