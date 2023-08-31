@@ -91,3 +91,7 @@ IRISAPP:zpm>test package-name
 
 
 do ##class(%SYS.Python).Shell()
+
+
+	iris session IRIS < iris.script && \
+    ([ $TESTS -eq 0 ] || iris session iris -U $NAMESPACE "##class(%ZPM.PackageManager).Shell(\"test $MODULE -v -only\",1,1)") && \
