@@ -14,7 +14,7 @@ print(iris.system.Process.NameSpace())
 
 # Run IRIS Class Method 
 print("Method call:")
-print(iris.cls('Demo.ObjectScript').Test())
+print(iris.cls('dc.Demo.ObjectScript').Test())
 
 # function to return IRIS version
 def iris_version():
@@ -26,7 +26,7 @@ print(iris_version())
 
 # function to create record in IRIS
 def create_rec(var):
-    obj=iris.cls('Demo.PersistentClass')._New()
+    obj=iris.cls('dc.Demo.PersistentClass')._New()
     obj.Test=var
     obj._Save()
     id=obj._Id()
@@ -35,7 +35,7 @@ def create_rec(var):
 # test record creation
 from datetime import datetime
 now=str(datetime.now())
-print("Creating new record in Demo.PersistentClass")
+print("Creating new record in dc.Demo.PersistentClass")
 print(create_rec(now))
 
 def print_rec(cls_name,id):
@@ -43,7 +43,7 @@ def print_rec(cls_name,id):
     print(obj.Test)
 
 print("Printing one IRIS Object :")
-print_rec('Demo.PersistentClass',1)
+print_rec('dc.Demo.PersistentClass',1)
 
 ## run SQL and print data
 def run_sql(query):
@@ -55,7 +55,7 @@ def run_sql(query):
         for row in rs:
             print(row)
 
-query="Select * from Demo.PersistentClass"
+query="Select * from dc.Demo.PersistentClass"
 print("Running SQL query "+query)
 run_sql(query)
 
@@ -68,7 +68,7 @@ def print_global(glname):
     for (key,value) in gl.query([]):
         print(f"key={key}: {value}")
 
-glname=iris.cls("%Dictionary.CompiledStorage")._OpenId("Demo.PersistentClass||Default").DataLocation
+glname=iris.cls("%Dictionary.CompiledStorage")._OpenId("dc.Demo.PersistentClass||Default").DataLocation
 print("Printing the whole global of the persistence storage for the class Demo.PersistentClass:"+glname)
 print_global(glname)
 

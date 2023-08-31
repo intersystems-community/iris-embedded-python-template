@@ -1,4 +1,4 @@
-Class Demo.ObjectScript Extends %RegisteredObject
+Class dc.Demo.ObjectScript Extends %RegisteredObject
 {
 
 /// Demo of pure ObjectScript Code

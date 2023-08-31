@@ -15,15 +15,15 @@ def hello_world():
 def create_persistentclass():
     if not request.json or not 'test' in request.json:
         abort(400)
-    obj=iris.cls('Demo.PersistentClass')._New()
+    obj=iris.cls('dc.Demo.PersistentClass')._New()
     obj.Test=request.json['test']
     obj._Save()
     return jsonify({'id':obj._Id(),'test':obj.Test}), 201
 
 @app.route('/persistentclass/<int:id>', methods=['GET'])
 def get_one_persistentclass(id):
-    if iris.cls('Demo.PersistentClass')._ExistsId(id):
-        obj=iris.cls('Demo.PersistentClass')._OpenId(id)
+    if iris.cls('dc.Demo.PersistentClass')._ExistsId(id):
+        obj=iris.cls('dc.Demo.PersistentClass')._OpenId(id)
         return jsonify({'id':id,'test':obj.Test})
     else:
         return jsonify({'error':'not found'}), 404

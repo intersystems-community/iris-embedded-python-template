@@ -1,4 +1,4 @@
-Class Demo.Python
+Class dc.Demo.Python
 {
 
 /// ObjectScript code calling Python code
@@ -25,6 +25,28 @@ ClassMethod Hello() As %Status
     Set sc = $$$OK
     Set sm = ##class(%SYS.Python).Import("sample")
     write sm.hello()
+    Return sc
+}
+
+/// ObjectScript code calling Python code
+/// Calling a custom Python module
+/// This module must be located in /usr/irissys/mgr/python/sample.py
+/// The src/python folder is mapped to /usr/irissys/mgr/python
+ClassMethod Mean() As %Status
+{
+    Set sc = $$$OK
+    Set sql = "SELECT Age FROM Demo.spaceship_titanic"
+    Set tStatement = ##class(%SQL.Statement).%New()
+    Set qStatus = tStatement.%Prepare(sql)
+    Set rset = tStatement.%Execute()
+    set df = ##class(%SYS.Python).Import("pandas")
+    set df = df.DataFrame()
+    while rset.%Next() {
+        set row = rset.%Get("Age")
+        do df.append(row)
+    }
+    Set sm = ##class(%SYS.Python).Import("sample")
+    write sm.mean(df)
     Return sc
 }
 
