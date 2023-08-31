@@ -15,7 +15,7 @@ iris.cls('Security.Users').UnExpireUserPasswords("*")
 iris.system.Process.SetNamespace("IRISAPP")
 
 # load zpm packages
-#iris.cls('%ZPM.PackageManager').Shell("load /home/irisowner/dev -v")
+iris.cls('%ZPM.PackageManager').Shell("load /home/irisowner/dev -v")
 
 # load demo data
 engine = create_engine('iris+emb:///')
