@@ -36,17 +36,9 @@ ClassMethod Mean() As %Status
 {
     Set sc = $$$OK
     Set sql = "SELECT Age FROM Demo.spaceship_titanic"
-    Set tStatement = ##class(%SQL.Statement).%New()
-    Set qStatus = tStatement.%Prepare(sql)
-    Set rset = tStatement.%Execute()
-    set df = ##class(%SYS.Python).Import("pandas")
-    set df = df.DataFrame()
-    while rset.%Next() {
-        set row = rset.%Get("Age")
-        do df.append(row)
-    }
+    Set df = ##class(%SYS.Python.SQL).exec(sql).dataframe()
     Set sm = ##class(%SYS.Python).Import("sample")
-    write sm.mean(df)
+    write sm.mean(df, "age")
     Return sc
 }
 
