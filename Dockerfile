@@ -5,6 +5,8 @@ FROM $IMAGE
 
 WORKDIR /home/irisowner/dev
 
+ARG TESTS=0
+
 # create Python env
 ## Embedded Python environment
 ENV IRISUSERNAME "SuperUser"
