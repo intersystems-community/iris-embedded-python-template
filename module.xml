@@ -13,7 +13,7 @@
           <Version>2.3.8</Version>
         </ModuleReference>
       </Dependencies>
-      <Resource Name="Demo.PKG"/>
+      <Resource Name="dc.Demo.PKG"/>
       <FileCopy Name="src/python/" Target="${libdir}python/"/>
       <FileCopy Name="data/" Target="${libdir}data/${packagename}/"/>
     </Module>
