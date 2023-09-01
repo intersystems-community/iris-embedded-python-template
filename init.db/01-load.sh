@@ -1,3 +1,9 @@
-#!/usr/bin/env iriscli
+#!/usr/irissys/bin/irispython
+from iris import ipm
 
-zpm "load /home/irisowner/dev -v": 1
+assert ipm('load /home/irisowner/dev -v')
+print('')
+assert ipm('list')
+print('')
+
+print('done')

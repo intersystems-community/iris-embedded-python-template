@@ -9,6 +9,7 @@ services:
     environment:
       - IRISUSERNAME=_SYSTEM
       - IRISPASSWORD=SYS
+    working_dir: /home/irisowner/dev
     volumes:
       - ./init.db/:/docker-entrypoint-initdb.d
       - ./:/home/irisowner/dev
