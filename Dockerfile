@@ -22,5 +22,5 @@ RUN --mount=type=bind,src=.,dst=. \
     pip3 install -r requirements.txt && \
     iris start IRIS && \
     iris merge IRIS /home/irisowner/dev/merge.cpf && \
-    python3 /home/irisowner/dev/iris-script.py && \
+    irispython /home/irisowner/dev/iris-script.py && \
     iris stop IRIS quietly

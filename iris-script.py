@@ -3,7 +3,7 @@ import os
 import iris
 import pandas as pd
 from sqlalchemy import create_engine
-from grongier.pex import Utils
+from iris import ipm
 
 # switch namespace to the %SYS namespace
 iris.system.Process.SetNamespace("%SYS")
@@ -14,8 +14,9 @@ iris.cls('Security.Users').UnExpireUserPasswords("*")
 # switch namespace to IRISAPP built by merge.cpf
 iris.system.Process.SetNamespace("IRISAPP")
 
-# load zpm packages
-iris.cls('%ZPM.PackageManager').Shell("load /home/irisowner/dev -v")
+# load ipm package listed in module.xml
+#iris.cls('%ZPM.PackageManager').Shell("load /home/irisowner/dev -v")
+assert ipm('load /home/irisowner/dev -v')
 
 # load demo data
 engine = create_engine('iris+emb:///')
