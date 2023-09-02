@@ -4,4 +4,5 @@ iris-pex-embedded-python>=2.0.0
 dataclasses-json==0.5.7
 sqlalchemy-iris==0.10.5
 flask==2.3.3
-requests==2.26.0
+requests==2.31.0
+https://github.com/grongierisc/iris-embedded-python-wrapper/releases/download/v0.0.4/iris-0.0.4-py3-none-any.whl
