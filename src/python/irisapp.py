@@ -1,14 +1,20 @@
 # Script to test IRIS Embedded Python calls.
 # Embedded python works in a shared memory with IRIS. 
 # Thus direct calls to IRIS classmethods, globals and tables are available via iris lib.
+# You an invoke this script from shell in the container by calling:
+# python3 src/python/irisapp.py
+import iris
+from sqlalchemy import create_engine,text
 
 print('Hello World')
 
-# Run IRIS Class Method 
-import iris
+# print current namespace
+print("Current namespace:")
+print(iris.system.Process.NameSpace())
 
+# Run IRIS Class Method 
 print("Method call:")
-print(iris.cls('dc.python.ObjectScript').Test())
+print(iris.cls('dc.Demo.ObjectScript').Test())
 
 # function to return IRIS version
 def iris_version():
@@ -20,7 +26,7 @@ print(iris_version())
 
 # function to create record in IRIS
 def create_rec(var):
-    obj=iris.cls('dc.python.PersistentClass')._New()
+    obj=iris.cls('dc.Demo.PersistentClass')._New()
     obj.Test=var
     obj._Save()
     id=obj._Id()
@@ -29,23 +35,31 @@ def create_rec(var):
 # test record creation
 from datetime import datetime
 now=str(datetime.now())
-print("Creating new record in dc.python.PersistentClass")
+print("Creating new record in dc.Demo.PersistentClass")
 print(create_rec(now))
 
 def print_rec(cls_name,id):
     obj=iris.cls(cls_name)._OpenId(id)
-    print(iris.cls("%SYSTEM.OBJ").Dump(obj))
+    print(obj.Test)
 
-print("Printing one IRIS Object Dump:")
-print_rec('dc.python.PersistentClass',1)
+print("Printing one IRIS Object :")
+print_rec('dc.Demo.PersistentClass',1)
 
 ## run SQL and print data
 def run_sql(query):
-    rs=iris.sql.exec(query)
-    for idx, row in enumerate(rs):
-        print(f"[{idx}]: {row}")
+    # create sqlalchemy engine
+    engine = create_engine('iris+emb:///')
+    # run query
+    with engine.connect() as conn:
+        rs = conn.execute(text(query))
+        for row in rs:
+            print(row)
 
-query="Select * from dc_python.PersistentClass"
+query="Select * from dc.Demo.PersistentClass"
+print("Running SQL query "+query)
+run_sql(query)
+
+query="select top 10 * from Demo.spaceship_titanic"
 print("Running SQL query "+query)
 run_sql(query)
 
@@ -54,9 +68,8 @@ def print_global(glname):
     for (key,value) in gl.query([]):
         print(f"key={key}: {value}")
 
-
-glname=iris.cls("%Dictionary.CompiledStorage")._OpenId("dc.python.PersistentClass||Default").DataLocation
-print("Printing the whole global of the persistence storage for the class dc.python.PersistentClass:"+glname)
+glname=iris.cls("%Dictionary.CompiledStorage")._OpenId("dc.Demo.PersistentClass||Default").DataLocation
+print("Printing the whole global of the persistence storage for the class Demo.PersistentClass:"+glname)
 print_global(glname)
 
 def global_order_demo():
