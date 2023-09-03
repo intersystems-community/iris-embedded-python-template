@@ -12,7 +12,10 @@
         "service": "iris",
         "internalPort": 52773
       },
-      "active": true
+      "active": true,
+      "links": {
+        "FlaskTest": "http://localhost:55030/"
+      }
     },
     "sqltools.connections": [
       {
