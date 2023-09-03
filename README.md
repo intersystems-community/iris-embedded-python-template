@@ -52,6 +52,43 @@ $ docker-compose build
 $ docker-compose up -d
 ```
 
+### IRIS Initialization
+In this template two approaches are provided to initialize iris: merge and python.
+
+1. Using merge to initialize IRIS and create IRIS Database and Namespace
+Notice merge.cpf file that is being implemented during docker image build in Dockerfile
+```
+iris merge IRIS merge.cpf && \
+```
+ that contains:
+```
+[Actions]
+CreateResource:Name=%DB_IRISAPP_DATA,Description="IRISAPP_DATA database"
+CreateDatabase:Name=IRISAPP_DATA,Directory=/usr/irissys/mgr/IRISAPP_DATA
+CreateResource:Name=%DB_IRISAPP_CODE,Description="IRISAPP_CODE database"
+CreateDatabase:Name=IRISAPP_CODE,Directory=/usr/irissys/mgr/IRISAPP_CODE
+CreateNamespace:Name=IRISAPP,Globals=IRISAPP_DATA,Routines=IRISAPP_CODE,Interop=1
+ModifyService:Name=%Service_CallIn,Enabled=1,AutheEnabled=48
+ModifyUser:Name=SuperUser,PasswordHash=a31d24aecc0bfe560a7e45bd913ad27c667dc25a75cbfd358c451bb595b6bd52bd25c82cafaa23ca1dd30b3b4947d12d3bb0ffb2a717df29912b743a281f97c1,0a4c463a2fa1e7542b61aa48800091ab688eb0a14bebf536638f411f5454c9343b9aa6402b4694f0a89b624407a5f43f0a38fc35216bb18aab7dc41ef9f056b1,10000,SHA512
+```
+As you can see it creates dabasases IRISAPP_DATA and IRISAPP_CODE for data and code, the related IRISAPP namespace to access it and the related resources %IRISAPP_DATA and %IRISAPP_CODE" to manage the access.
+
+Also it enables Callin service to make Embedded python work via ModifyService clause.
+and it updates the password for the built-in user SuperUser to "SYS". The hash for this password is obtained via the following command:
+```bash
+docker run --rm -it containers.intersystems.com/intersystems/passwordhash:1.1 -algorithm SHA512 -workfactor 10000
+```
+
+2. Using python to initialize IRIS.
+Often we used a special iris.script file to run ObjectScript commands during the initialization.
+This template shows you how to use python for the same purpose.
+It is being executed via the line in Dockerfile:
+```
+irispython iris-script.py && \
+```
+the iris-script.py file contains examples how developer can initialize different services of iris via Python code.
+
+
 ## How to test it
 
 ### Working with Python libs from ObjectScript
@@ -88,18 +125,10 @@ As mentioned Embedded Python works in the **same process as IRIS**.
 
 So you have 2 options to work with Embedded Python in IRIS:
 
-1. Bind VsCode to the running IRIS container.
-2. Develop in VSCode locally and then run the code in IRIS container with a shared folder.
+1. Develop in VSCode locally and then run the code in IRIS container with a shared folder.
+2. Bind VsCode to the running IRIS container.
 
-#### Bind VSCode to the running IRIS container
-
-Open VSCode in the project directory.
-
-Go to the `docker-compose.yml` file, right-click on it and select `Compose Up`.
-
-Once the container is up and running you can open the docker extension and right-click on the container name and select `Attach Visual Studio Code`.
-
-#### Develop locally and run the code in IRIS container
+### Develop python scripts locally and run the code in IRIS container
 
 By default, the template is configured to use the shared folder `./src` for python scripts to `/home/irisowner/dev/src` in IRIS container.
 
@@ -121,7 +150,7 @@ Install the requirements:
 $ pip install -r requirements.txt
 ```
 
-Run the python script:
+#### Run the python script in iris container:
 
 ```bash
 # attach to the running IRIS container
@@ -129,7 +158,44 @@ docker-compose exec iris bash
 # run the script
 $ irispython ./python/irisapp.py
 ```
+The script contains different samples of working with IRIS from python and goes through it.
+it should return something like this:
+```
+Hello World
+Method call:
+It works!
+42
+Iris Version:
+IRIS for UNIX (Ubuntu Server LTS for ARM64 Containers) 2023.2 (Build 227U) Mon Jul 31 2023 17:43:25 EDT
+Creating new record in dc.python.PersistentClass
+1
+Printing one IRIS Object Dump:
++----------------- general information ---------------
+|      oref value: 1
+|      class name: dc.python.PersistentClass
+|           %%OID: $lb("1","dc.python.PersistentClass")
+| reference count: 1
++----------------- attribute values ------------------
+|       %Concurrency = 1  <Set>
+|               Test = "2023-09-03 10:56:45.227577"
++-----------------------------------------------------
+1
+Running SQL query Select * from dc_python.PersistentClass
+[0]: ['1', '2023-09-03 10:56:45.227577']
+Printing the whole global of the persistence storage for the class dc.python.PersistentClass:^dc.Package4C8F.PersistentC1A93D
+key=['1']: 2023-09-03 10:56:45.227577
+James
+Jim
+John
+```
 
+#### Bind VSCode to the running IRIS container
+
+Open VSCode in the project directory.
+
+Go to the `docker-compose.yml` file, right-click on it and select `Compose Up`.
+
+Once the container is up and running you can open the docker extension and right-click on the container name and select `Attach Visual Studio Code`.
 
 #### Working with IRIS from Embedded Python
 Open VSCode in Devcontainer - this is the bell(notifications) button in the left bottom corner, where you will see the suggestion to open VSCOde in DevContainer mode.
@@ -139,7 +205,6 @@ Once devcontainer is opened go to /python/irisapp.py and run it, either with Run
 ```bash
 $ irispython /python/irisapp.py
 ```
-The script contains different samples of working with IRIS from python and goes through it.
 
 
 ### Working with flask
