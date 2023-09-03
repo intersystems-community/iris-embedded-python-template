@@ -56,7 +56,7 @@ $ docker-compose up -d
 In this template two approaches are provided to initialize iris: merge and python.
 
 1. Using merge to initialize IRIS and create IRIS Database and Namespace
-Notice merge.cpf file that is being implemented during docker image build in Dockerfile
+Notice [merge.cpf](https://github.com/intersystems-community/iris-embedded-python-template/blob/4c12d4b02770c7422c7553ee818a18c1871c3759/merge.cpf) file that is being implemented during docker image build in Dockerfile
 ```
 iris merge IRIS merge.cpf && \
 ```
@@ -81,7 +81,7 @@ docker run --rm -it containers.intersystems.com/intersystems/passwordhash:1.1 -a
 
 2. Using python to initialize IRIS.
 Often we used a special iris.script file to run ObjectScript commands during the initialization.
-This template shows you how to use python for the same purpose.
+This template shows you how to use python for the same purpose with [iris-script.py](https://github.com/intersystems-community/iris-embedded-python-template/blob/4c12d4b02770c7422c7553ee818a18c1871c3759/iris-script.py)file.
 It is being executed via the line in Dockerfile:
 ```
 irispython iris-script.py && \
