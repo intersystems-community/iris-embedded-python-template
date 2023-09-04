@@ -54,6 +54,7 @@ $ docker-compose up -d
 
 ### IRIS Initialization
 In this template two approaches are provided to initialize iris: merge and python.
+merge.cpf is a convenient way to setup different IRIS configuration settings. [Learn more about merge.cpf](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RACS_cpf#:~:text=Use%20the%20iris%20merge%20command,is%20the%20instance's%20current%20iris.).
 
 1. Using merge to initialize IRIS and create IRIS Database and Namespace
 Notice [merge.cpf](https://github.com/intersystems-community/iris-embedded-python-template/blob/4c12d4b02770c7422c7553ee818a18c1871c3759/merge.cpf) file that is being implemented during docker image build in Dockerfile
@@ -80,75 +81,25 @@ docker run --rm -it containers.intersystems.com/intersystems/passwordhash:1.1 -a
 ```
 
 2. Using python to initialize IRIS.
-Often we used a special iris.script file to run ObjectScript commands during the initialization.
-This template shows you how to use python for the same purpose with [iris-script.py](https://github.com/intersystems-community/iris-embedded-python-template/blob/4c12d4b02770c7422c7553ee818a18c1871c3759/iris-script.py)file.
+Often we used a special [iris.script](https://github.com/intersystems-community/iris-embedded-python-template/blob/d7c817865b48681e3454997906e1374b3baeef74/iris.script) file to run ObjectScript commands during the initialization - it is here just for the information.
+This template shows you how to use python for the same purpose with [iris_script.py](https://github.com/intersystems-community/iris-embedded-python-template/blob/4c12d4b02770c7422c7553ee818a18c1871c3759/iris_script.py)file.
 It is being executed via the line in Dockerfile:
 ```
-irispython iris-script.py && \
+irispython iris_script.py && \
 ```
-the iris-script.py file contains examples how developer can initialize different services of iris via Python code.
+the iris_script.py file contains examples how developer can initialize different services of iris via Python code.
 
 
 ## How to test it
 
-### Working with Python libs from ObjectScript
-Open IRIS terminal:
-
-```objectscript
-$ docker-compose exec iris iris session iris
-USER>zn "IRISAPP"
-```
-
-The first test demonstrates the call to a standard python library working with dates datetime
-```objectscript
-IRISAPP>d ##class(dc.python.test).Today()
-2021-02-09
-```
-
-Another example shows the work of a custom lib sample.py which is installed with repo or ZPM. It has function hello which returns string "world":
-```objectscript
-IRISAPP>d ##class(dc.python.test).Hello()
-World
-```
-
-Another example shows how to work with files and use pandas and numpy libs.
-It calculates the mean age of Titanic passengers:
-
-```objectscript
-IRISAPP>d ##class(dc.python.test).TitanicMeanAge()
-mean age=29.69911764705882
-
-```
 ### Working with IRIS from Embedded Python
 
 As mentioned Embedded Python works in the **same process as IRIS**.
 
 So you have 2 options to work with Embedded Python in IRIS:
 
-1. Develop in VSCode locally and then run the code in IRIS container with a shared folder.
+1. Run the code in IRIS container with a shared folder.
 2. Bind VsCode to the running IRIS container.
-
-### Develop python scripts locally and run the code in IRIS container
-
-By default, the template is configured to use the shared folder `./src` for python scripts to `/home/irisowner/dev/src` in IRIS container.
-
-You can change the folder according to your preferences.
-
-It's recommended to work with a virtual environment.
-
-Create a virtual environment in the project directory. Click New Terminal in the VS Code menu:
-```bash
-$ python3 -m venv .venv
-```
-Activate the virtual environment:
-```
-$ source .venv/bin/activate
-```
-
-Install the requirements:
-```
-$ pip install -r requirements.txt
-```
 
 #### Run the python script in iris container:
 
@@ -205,6 +156,59 @@ Once devcontainer is opened go to /python/irisapp.py and run it, either with Run
 ```bash
 $ irispython /python/irisapp.py
 ```
+
+
+### Working with Python libs from ObjectScript
+Open IRIS terminal:
+
+```objectscript
+$ docker-compose exec iris iris session iris
+USER>zn "IRISAPP"
+```
+
+The first test demonstrates the call to a standard python library working with dates datetime
+```objectscript
+IRISAPP>d ##class(dc.python.test).Today()
+2021-02-09
+```
+
+Another example shows the work of a custom lib sample.py which is installed with repo or ZPM. It has function hello which returns string "world":
+```objectscript
+IRISAPP>d ##class(dc.python.test).Hello()
+World
+```
+
+Another example shows how to work with files and use pandas and numpy libs.
+It calculates the mean age of Titanic passengers:
+
+```objectscript
+IRISAPP>d ##class(dc.python.test).TitanicMeanAge()
+mean age=29.69911764705882
+
+```
+
+### Develop python scripts locally
+
+By default, the template is configured to use the shared folder `./python` for python scripts to `/home/irisowner/dev/python` in IRIS container.
+
+You can change the folder according to your preferences. Usually python developers name project at the root folder.
+
+It's recommended to work with a virtual environment.
+
+Create a virtual environment in the project directory. Click New Terminal in the VS Code menu:
+```bash
+$ python3 -m venv .venv
+```
+Activate the virtual environment:
+```
+$ source .venv/bin/activate
+```
+
+Install the requirements:
+```
+$ pip install -r requirements.txt
+```
+
 
 
 ### Working with flask
