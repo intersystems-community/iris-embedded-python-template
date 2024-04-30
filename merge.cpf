@@ -1,7 +1,7 @@
 [Actions]
-CreateResource:Name=%DB_IRISAPP_DATA,Description="IRISAPP_DATA database"
+CreateResource:Name=%DB_IRISAPP_DATA,Description="IRISAPP_DATA database resource"
 CreateDatabase:Name=IRISAPP_DATA,Directory=/usr/irissys/mgr/IRISAPP_DATA,Resource=%DB_IRISAPP_DATA
-CreateResource:Name=%DB_IRISAPP_CODE,Description="IRISAPP_CODE database"
+CreateResource:Name=%DB_IRISAPP_CODE,Description="IRISAPP_CODE database resource"
 CreateDatabase:Name=IRISAPP_CODE,Directory=/usr/irissys/mgr/IRISAPP_CODE,Resource=%DB_IRISAPP_CODE
 CreateNamespace:Name=IRISAPP,Globals=IRISAPP_DATA,Routines=IRISAPP_CODE,Interop=1
 ModifyService:Name=%Service_CallIn,Enabled=1,AutheEnabled=48
