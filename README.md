@@ -154,7 +154,7 @@ Follow it - it will let to execute Embedded Python scripts vs IRIS and develop i
 
 Once devcontainer is opened go to /python/irisapp.py and run it, either with Run button in the top right corner, or in terminal via:
 ```bash
-$ irispython /python/irisapp.py
+$ irispython python/irisapp.py
 ```
 
 
@@ -222,7 +222,7 @@ $ docker-compose exec iris bash
 
 Run the following commands to start the flask server:
 ```
-irispython /python/flask/app.py
+irispython python/flask/app.py
 ```
 
 That will start the flask server and you will see the following output:
