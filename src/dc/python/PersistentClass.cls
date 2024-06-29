@@ -4,7 +4,7 @@ Class dc.python.PersistentClass Extends %Persistent
 /// Description
 Property Test As %VarString;
 
-ClassMethod CreateRecord(propValue As %VarString = "TestString", ByRef id As %Integer) As %Status
+ClassMethod CreateRecord(propValue As %VarString = "TestString", id As %Integer) As %Status
 {
     set sc=$$$OK
     set obj=..%New()
@@ -14,7 +14,7 @@ ClassMethod CreateRecord(propValue As %VarString = "TestString", ByRef id As %In
     return sc
 }
 
-ClassMethod CreateRecordPython(propValue As %VarString, ByRef id As %Integer) [ Language = python ]
+ClassMethod CreateRecordPython(propValue As %VarString, id As %Integer) [ Language = python ]
 {
     import iris
     obj=iris.cls(__name__)._New()
