@@ -52,13 +52,42 @@ ClassMethod DivideByZero() As %Status
 ClassMethod DivideByZeroPython() [ Language = python ]
 {
     import sample
+    import traceback
     import iris
     try:
         print("divide by zero=" + str(sample.dividezero(1)))
     except ZeroDivisionError as e:
         errobj=iris.cls("%Exception.General")._New(str(e),42)
-        a=errobj.Log()
-        print("Caught exception: " + str(e))
+        stack_trace_list = traceback.format_tb(e.__traceback__)
+        if stack_trace_list:
+            last_instruction_line = stack_trace_list[-1].strip()
+            errobj.Location = last_instruction_line 
+        errobj.Log()
+        print("Caught exception: " +str(e))
+}
+
+ClassMethod DivideByZeroPython2() [ Language = python ]
+{
+    import sample
+    import traceback
+    import iris
+    import os
+    try:
+        print("divide by zero=" + str(sample.dividezero(1)))
+    except ZeroDivisionError as e:
+        tb = e.__traceback__
+        last_frame = traceback.extract_tb(tb)[-1]
+    
+        # 2. Extract specific parts
+        error_name = f"<{type(e).__name__.upper()}>" # e.g., <NAMEERROR>
+        line_no = last_frame.lineno               # e.g., 6
+        func_name = last_frame.name               # e.g., <module> or my_func
+        filename = os.path.basename(last_frame.filename).replace('.py', '') 
+    
+        iris_error = f"{func_name}+{line_no}^{filename}"
+        errobj=iris.cls("%Exception.General")._New(error_name,2603,iris_error)
+        errobj.Log()
+        print("Caught exception: " +str(e))
 }
 
 }

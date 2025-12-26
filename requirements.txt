@@ -4,3 +4,4 @@ dataclasses-json
 sqlalchemy-iris
 flask
 requests
+traceback2
