@@ -19,4 +19,7 @@ def meanage(filename):
 
     return str(mean_age)
 
+def dividezero(x):
+    return x / 0
+
 # print(meanage("/home/irisowner/dev/data/titanic.csv"))

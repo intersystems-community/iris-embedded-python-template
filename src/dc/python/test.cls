@@ -35,4 +35,30 @@ ClassMethod TitanicMeanAge() As %Status
     Return sc
 }
 
+ClassMethod DivideByZero() As %Status
+{
+    Set sc = $$$OK
+    set tt=##class(%SYS.Python).Import("sample")
+    try {
+    write "divide by zero="_tt.dividezero(1)
+    #dim ex as %Exception.PythonException
+    } catch ex  {
+        do ex.Log()
+        write "Caught exception: ", ex.DisplayString(), !
+    }
+    Return sc
+}
+
+ClassMethod DivideByZeroPython() [ Language = python ]
+{
+    import sample
+    import iris
+    try:
+        print("divide by zero=" + str(sample.dividezero(1)))
+    except ZeroDivisionError as e:
+        errobj=iris.cls("%Exception.General")._New(str(e),42)
+        a=errobj.Log()
+        print("Caught exception: " + str(e))
+}
+
 }
