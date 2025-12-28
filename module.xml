@@ -6,6 +6,12 @@
       <Version>3.0.9</Version>
       <Description>The simplest template to run embedded python</Description>
       <Packaging>module</Packaging>
+      <Dependencies>
+        <ModuleReference>
+          <Name>embeddedpy-bridge</Name>
+          <Version>1.0.*</Version>
+        </ModuleReference>
+      </Dependencies>
       <SourcesRoot>src</SourcesRoot>
       <Resource Name="dc.python.PKG"/>
       <FileCopy Name="python/" Target="${libdir}python/"/>
